@@ -1,19 +1,19 @@
 # expense_manager
 
-##Setup
+## Setup
 Install requirements and dependencies.
-####Windows
+#### Windows
 '''
 python -m venv env
 venv/Scripts/activate.ps1
 '''
-####Linux
+#### Linux
 '''
 python3 -m venv env
 source venv/bin/activate
 '''
 
-##Run
+## Run
 '''
 python -m flask run
 '''
