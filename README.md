@@ -1,4 +1,4 @@
-# expense_manager
+# eXpense
 
 ## Setup
 Install requirements and dependencies.
