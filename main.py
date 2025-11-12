@@ -1,37 +1,54 @@
 import numpy as np
 import pandas as pd
 from datetime import datetime
+import speech_recognition as sr
 
-def add_expense(account, cat, note, amount, income_expense):
-    df = pd.read_csv("expense_data_1.csv")
-    date_obj = datetime.now()
+def record_audio(duration=4):
+
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        print(f"🎤 Recording for {duration} seconds... (speak now)")
+        r.adjust_for_ambient_noise(source)
+        audio = r.listen(source, phrase_time_limit=duration)
+
+    print("⏹️ Recording stopped. Processing...")
 
     try:
-        amount = float(amount)
-    except ValueError:
-        print("Amount must be numeric.")
-        return
-#meow meow
-#Bhaww Bhawwww
-#kaw kaw
-    cat = cat.strip().capitalize()
-    note = note.strip() if note else ""
-    account = account
-    income_expense = income_expense.capitalize()
-    new_row = {
-        "Date": date_obj.strftime("%Y-%m-%d %H:%M"),
-        "Mode": account,
-        "Category": cat,
-        "Note": note,
-        "INR": amount,
-        "Income/Expense": income_expense,
-        "Amount": amount,
-        "Currency": "INR",
-    }
+        text = r.recognize_google(audio)
+        return text
+    except sr.UnknownValueError:
+        return "Could not understand audio."
 
-    df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
-    df.to_csv("expense_data_1.csv", index=False)
-    print(f"Added {income_expense.lower()} of ₹{amount} under '{cat}' category.")
+
+def add_expense(account , cat, note, amount, income_expense):
+        df = pd.read_csv("expense_data_1.csv")
+        date_obj = datetime.now()
+
+        try:
+            amount = float(amount)
+        except ValueError:
+            print("Amount must be numeric.")
+            return
+
+        cat = cat.strip().capitalize()
+        note = note.strip() if note else ""
+        account = account
+        income_expense = income_expense.capitalize()
+        new_row = {
+            "Date": date_obj.strftime("%Y-%m-%d %H:%M"),
+            "Mode": account,
+            "Category": cat,
+            "Note": note,
+            "INR": amount,
+            "Income/Expense": income_expense,
+            "Amount": amount,
+            "Currency": "INR",
+        }
+
+        df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+        df.to_csv("expense_data_1.csv", index=False)
+        return f"Added {income_expense.lower()} of ₹{amount} under '{cat}' category."
+
 
 def view():
     all_expense = pd.read_csv("expense_data_1.csv")
@@ -40,7 +57,6 @@ def view():
 def view_par(col_name):
     df = pd.read_csv("expense_data_1.csv")
     return df[col_name.capitalize()]
-
 
 def delete_expense(row_number):
     df = pd.read_csv("expense_data_1.csv")
@@ -62,7 +78,6 @@ def calculate_expense(file_path = "expense_data_1.csv"):
 
     total_income = np.sum(income)
     total_expense = np.sum(expense)
-
     avg_transaction = np.mean(amounts)
 
     print(" Account Summary:")
@@ -72,27 +87,55 @@ def calculate_expense(file_path = "expense_data_1.csv"):
 
 
 while True:
-    print("\n1.add ")
-    print("\n2.view ")
-    print("\n3.delete ")
-    print("\n4.stats ")
+    print("\n1.add with mic ")
+    print("\n2.add ")
+    print("\n3.view ")
+    print("\n4.delete ")
+    print("\n5.stats ")
     try:
         ch = int(input("Enter your choice: "))
     except ValueError:
         print("Invalid choice. Please enter a valid choice.")
         continue
     if ch == 1:
+        txt = record_audio()
+        if txt == "Could not understand audio.":
+            print("Sorry, can't here..")
+            continue
+        else:
+            print(txt)
+            txt_1 = txt.split()
+            if txt_1[0].isdigit():
+                a = int(txt_1[0])
+                c = txt_1[2] if len(txt_1) >= 2 else None
+            elif txt_1[1].isdigit():
+                a = int(txt_1[1])
+                c = txt_1[3] if len(txt_1) >= 3 else None
+            else:
+                print("No numeric value found in input.")
+                a, c = None, None
+            m = "online"
+            n = ""
+            if txt_1[0].lower() == "got":
+                i = "income"
+            else:
+                i = "expense"
+            print(add_expense(m, c, n, a, i))
+            #100 in food
+            #add 100 in food
+            #got 100 on upi
+            
+    if ch == 2:
         m = input("mode of payment? ")
         n = input("note(not compulsory: ")
-        a= input("amount(in rupees): ")
+        a = input("amount(in rupees): ")
         i = input("income or expense ?")
         if i == "income":
-
             c = input("reason of income: ")
         else:
             c = input("reason of expense: ")
-        print(add_expense(m,c,n,a,i))
-    if ch == 2:
+        print(add_expense(m, c, n, a, i))
+    if ch == 3:
         print("1.Particular column. ")
         print("2.Full sheet")
         ch2 = int(input("1 or 2: "))
@@ -110,13 +153,13 @@ while True:
         else:
             print(view())
 
-    if ch == 3:
+    if ch == 4:
         df = pd.read_csv("expense_data_1.csv")
         print(df.tail())
         row = int(input("Enter row number: "))
         delete_expense(row)
 
-    if ch == 4:
+    if ch == 5:
         print(calculate_expense())
 
 
