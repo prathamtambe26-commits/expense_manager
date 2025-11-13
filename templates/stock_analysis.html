@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stock Analysis</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <h1>Stock Analysis</h1>
+    <table border="2">
+        <tr>
+            <th>Purchase Date</th>
+            <th>Stock</th>
+            <th>Purchase Price</th>
+            <th>Current Price</th>
+            <th>Gain/Loss</th>
+        </tr>
+        {% for stock in stocks %}
+        <tr>
+            <td>{% if stock.Date and stock.Date is not none %}{{ stock.Date.strftime('%Y-%m-%d') }}{% endif %}</td>
+            <td>{{ stock.Category }}</td>
+            <td>₹{{ "%.2f"|format(stock.Amount) }}</td>
+            <td>₹{{ "%.2f"|format(stock.CurrentPrice) }}</td>
+            <td>₹{{ "%.2f"|format(stock.GainLoss) }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <a href="/">Back to Home</a>
+</body>
+</html>
