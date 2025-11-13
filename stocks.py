@@ -49,7 +49,7 @@ def get_price(symbol_to_find, ex, target_date=None):
     api_version = '2.0'
     if target_date is None:
         target_date = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
-        
+
     try:
         # 3. Call the historical data method
         api_response = api_instance.get_historical_candle_data1(

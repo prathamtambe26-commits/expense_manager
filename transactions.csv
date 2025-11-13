@@ -1,5 +1,7 @@
-Date,Category,Amount,Type
-2025-11-10,Food,60.0,Expenditure
-2025-11-10,Pocket Money,3000.0,Income
-2025-11-05,Transportation,200.0,Expenditure
-2025-11-07,Entertainment,100.0,Expenditure
+Date,Category,Amount,Type,Quantity
+2025-11-10 00:00:00,Food,60.0,Expenditure,
+2025-11-10 00:00:00,Pocket Money,3000.0,Income,
+2025-11-05 00:00:00,Transportation,200.0,Expenditure,
+2025-11-07 00:00:00,Entertainment,100.0,Expenditure,
+,Food,20.0,Expenditure,
+2025-10-31,BPCL,356.8,Investment,1.0
