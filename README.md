@@ -3,6 +3,9 @@
 
 ## Setup
 Install requirements and dependencies.
+
+Download and paste in root folder: https://assets.upstox.com/market-quote/instruments/exchange/complete.json.gz
+
 #### Windows
 ```
 cd expense_manager/
